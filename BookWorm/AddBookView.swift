@@ -12,6 +12,8 @@ struct AddBookView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     
+    @State private var showingAlert = false
+    
     @State private var title = ""
     @State private var author = ""
     @State private var rating = 3
@@ -41,15 +43,34 @@ struct AddBookView: View {
                 
                 Section {
                     Button("Save") {
-                        let newBook = Book(title: title, author: author, genre: genre, review: review, rating: rating)
-                        modelContext.insert(newBook)
-                        dismiss()
+                        if notValidBook() == false {
+                            let newBook = Book(title: title, author: author, genre: genre, review: review, rating: rating)
+                            modelContext.insert(newBook)
+                            dismiss()
+                        }
                     }
                 }
             }
             .navigationTitle("Add Book")
+            .alert("Missing Information!", isPresented: $showingAlert) {
+                Button("Ok") {
+                    showingAlert.toggle()
+                }
+            } message: {
+                Text("Some information Required is Empty or are not valid! Please, fill it correctly to save book.")
+            }
         }
     }
+    
+    func notValidBook() -> Bool {
+        if title.isNotValidString || author.isNotValidString || genre.isNotValidString {
+            showingAlert.toggle()
+            return true
+        } else {
+            return false
+        }
+    }
+    
 }
 
 #Preview {
