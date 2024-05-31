@@ -7,10 +7,14 @@
 
 import Foundation
 
-//validate string by white spaces and new lines and if it is Empty
+//validate string by white spaces and new lines and if it is Empty or have less than 2 characters
 extension String {
-    var isNotValidString: Bool {
-        self.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    var isNotAValidString: Bool {
+        self.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || self.count <= 1
+    }
+    
+    var trimmingWhiteSpaces: String {
+        self.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }
 

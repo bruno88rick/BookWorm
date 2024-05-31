@@ -22,6 +22,15 @@ struct AddBookView: View {
     
     let genres = ["Fantasy", "Horror", "Kids", "Mystery", "Poetry", "Romance", "Thriller"]
     
+    var notValidBook: Bool {
+        if title.isNotAValidString || author.isNotAValidString || genre.isNotAValidString {
+            showingAlert.toggle()
+            return true
+        } else {
+            return false
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -43,8 +52,8 @@ struct AddBookView: View {
                 
                 Section {
                     Button("Save") {
-                        if notValidBook() == false {
-                            let newBook = Book(title: title, author: author, genre: genre, review: review, rating: rating)
+                        if notValidBook == false {
+                            let newBook = Book(title: title.trimmingWhiteSpaces, author: author.trimmingWhiteSpaces, genre: genre, review: review, rating: rating)
                             modelContext.insert(newBook)
                             dismiss()
                         }
@@ -61,16 +70,6 @@ struct AddBookView: View {
             }
         }
     }
-    
-    func notValidBook() -> Bool {
-        if title.isNotValidString || author.isNotValidString || genre.isNotValidString {
-            showingAlert.toggle()
-            return true
-        } else {
-            return false
-        }
-    }
-    
 }
 
 #Preview {
