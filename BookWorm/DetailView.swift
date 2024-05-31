@@ -36,7 +36,16 @@ struct DetailView: View {
                 .font(.largeTitle)
                 .foregroundStyle(.secondary)
             
+            Text("Registration Date: \(book.registrationDate, format: .dateTime.day().month().year().hour().minute()) h")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            
             Text(book.review)
+                .padding()
+            
+            Text("Read in: \(book.readingDate, format: .dateTime.month().year())")
+                .font(.title3)
+                .foregroundStyle(.primary)
                 .padding()
             
             RatingView(rating: .constant(book.rating))
@@ -69,7 +78,7 @@ struct DetailView: View {
     do {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: Book.self, configurations: config)
-        let example = Book(title: "Livro de Teste", author: "Autor de Teste", genre: "Horror", review: "Este livro  é muito bom e eu gostei bastande dele.", rating: 3)
+        let example = Book(title: "Livro de Teste", author: "Autor de Teste", genre: "Horror", review: "Este livro  é muito bom e eu gostei bastande dele.", rating: 3, readingDate: Date.now)
         
         return DetailView(book: example)
     } catch {
