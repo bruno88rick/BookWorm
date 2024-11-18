@@ -32,10 +32,32 @@ struct RatingView: View {
                     image(for: number)
                         .foregroundStyle(number > rating ? offColor : onColor)
                 }
+                //we can do this for accessibility:
+                /*
+                .accessibilityLabel("\(number == 1 ? "1 Star" : "\(number) stars")")
+                //Now we can make VoiceOver add a second trait, .isSelected, if the star is already highlighted
+                .accessibilityAddTraits(number > rating ? [] : [.isSelected])
+            */
             }
         }
         //We can disable the whole "tap the row to trigger its buttons" behavior with an extra modifier attached to the whole HStack:
         .buttonStyle(.plain)
+        //we can do better for accessibility rather than above on the button
+        .accessibilityElement()
+        .accessibilityLabel(label)
+        .accessibilityValue(rating == 1 ? "1 Star" : "\(rating) stars")
+        .accessibilityAdjustableAction {   direction in
+        
+            switch direction {
+            case .increment:
+                if rating < maximumRating { rating += 1 }
+            case .decrement:
+                if rating > 1 { rating -= 1 }
+            default:
+                break
+            }
+            
+        }
     }
     
     func image(for number: Int) -> Image {
